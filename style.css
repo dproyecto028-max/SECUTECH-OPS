@@ -31,7 +31,7 @@ body {
   font-family: "Poppins", sans-serif;
   min-height: 100vh;
   background:
-    linear-gradient(180deg, rgba(2, 8, 18, 0.7), rgba(2, 8, 18, 0.78)),
+    linear-gradient(180deg, rgba(2, 8, 18, 0.72), rgba(2, 8, 18, 0.82)),
     url("FONDO.jpg") center top / 100% auto repeat-y;
   color: var(--text);
   line-height: 1.6;
@@ -40,16 +40,208 @@ body {
 
 body::before {
   content: "";
-  position: absolute;
+  position: fixed;
   inset: 0;
   background:
-    linear-gradient(180deg, rgba(5, 11, 22, 0.42), rgba(5, 11, 22, 0.72)),
-    radial-gradient(circle at 15% 15%, rgba(96, 165, 250, 0.2), transparent 22%),
-    radial-gradient(circle at 80% 8%, rgba(139, 92, 246, 0.18), transparent 18%);
+    linear-gradient(180deg, rgba(5, 11, 22, 0.12), rgba(5, 11, 22, 0.8)),
+    radial-gradient(circle at 15% 15%, rgba(96, 165, 250, 0.22), transparent 22%),
+    radial-gradient(circle at 80% 8%, rgba(139, 92, 246, 0.2), transparent 18%);
   background-repeat: repeat;
   pointer-events: none;
   z-index: 0;
   opacity: 1;
+}
+
+.intro-screen {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: radial-gradient(circle at center, rgba(15, 27, 48, 0.95), rgba(2, 7, 15, 0.98));
+  z-index: 200;
+  opacity: 1;
+  visibility: visible;
+  overflow: hidden;
+  pointer-events: auto;
+  transition: opacity 1.2s cubic-bezier(0.22, 1, 0.36, 1), visibility 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+  animation: introReveal 0.8s ease forwards;
+}
+
+.intro-screen.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.intro-video {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 100vw;
+  height: 100vh;
+  min-width: 100%;
+  min-height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  transform: translate(-50%, -50%) scale(1.12);
+  filter: brightness(0.55) saturate(1.25) contrast(1.12);
+  will-change: transform, filter;
+  animation: introVideoPan 18s ease-in-out infinite alternate;
+}
+
+.intro-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(94, 234, 212, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(94, 234, 212, 0.08) 1px, transparent 1px);
+  background-size: 32px 32px;
+  mask-image: radial-gradient(circle at center, black 28%, transparent 100%);
+  animation: gridDrift 16s linear infinite;
+}
+
+.intro-particles {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.intro-particles span {
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(94, 234, 212, 0.7);
+  box-shadow: 0 0 18px rgba(94, 234, 212, 0.7);
+  animation: floatParticle 10s ease-in-out infinite alternate;
+}
+
+.intro-particles span:nth-child(1) { top: 20%; left: 18%; animation-delay: 0.5s; }
+.intro-particles span:nth-child(2) { top: 38%; right: 22%; animation-delay: 1.5s; }
+.intro-particles span:nth-child(3) { bottom: 18%; left: 30%; animation-delay: 2.4s; }
+.intro-particles span:nth-child(4) { bottom: 28%; right: 32%; animation-delay: 3.1s; }
+.intro-particles span:nth-child(5) { top: 50%; left: 50%; animation-delay: 4.2s; }
+
+.intro-core {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  text-align: center;
+  filter: drop-shadow(0 0 24px rgba(94, 234, 212, 0.25));
+}
+
+.intro-pulse {
+  position: absolute;
+  inset: -40px;
+  border-radius: 50%;
+  border: 1px solid rgba(94, 234, 212, 0.42);
+  box-shadow: 0 0 45px rgba(94, 234, 212, 0.23), 0 0 90px rgba(96, 165, 250, 0.12);
+  animation: introPulse 2.1s ease-in-out infinite;
+}
+
+.intro-logo {
+  width: min(38vw, 240px);
+  height: auto;
+  position: relative;
+  z-index: 1;
+}
+
+.intro-kicker {
+  position: relative;
+  z-index: 1;
+  font-size: 0.72rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: rgba(165, 243, 252, 0.78);
+}
+
+.intro-core h2 {
+  position: relative;
+  z-index: 1;
+  color: var(--text);
+  font-size: clamp(2rem, 3vw, 3rem);
+  margin: 0;
+  text-shadow: 0 0 24px rgba(94, 234, 212, 0.2);
+}
+
+.intro-enter-btn {
+  position: relative;
+  z-index: 1;
+  margin-top: 10px;
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #8ef9ff 0%, #5eead4 35%, #60a5fa 70%, #8b5cf6 100%);
+  color: #041b2f;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.9rem 1.8rem;
+  cursor: pointer;
+  pointer-events: auto;
+  box-shadow: 0 18px 35px rgba(94, 234, 212, 0.2), 0 0 24px rgba(96, 165, 250, 0.18);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.intro-enter-btn:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 24px 40px rgba(94, 234, 212, 0.26), 0 0 28px rgba(96, 165, 250, 0.22);
+}
+
+@keyframes introPulse {
+  0%,
+  100% {
+    transform: scale(0.96);
+    opacity: 0.65;
+  }
+  50% {
+    transform: scale(1.08);
+    opacity: 1;
+  }
+}
+
+@keyframes gridDrift {
+  0% { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(0, 32px, 0); }
+}
+
+@keyframes floatParticle {
+  0% {
+    transform: translate3d(0, 0, 0) scale(0.8);
+    opacity: 0.35;
+  }
+  100% {
+    transform: translate3d(18px, -24px, 0) scale(1.35);
+    opacity: 1;
+  }
+}
+
+@keyframes orbFloat {
+  0% {
+    transform: translate3d(0, 0, 0) scale(0.94);
+    opacity: 0.5;
+  }
+  100% {
+    transform: translate3d(20px, -18px, 0) scale(1.08);
+    opacity: 0.9;
+  }
+}
+
+@keyframes introVideoPan {
+  0% {
+    transform: translate(-50%, -50%) scale(1.08);
+    filter: brightness(0.5) saturate(1.1) contrast(1.08);
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.15) translate3d(-12px, 6px, 0);
+    filter: brightness(0.58) saturate(1.25) contrast(1.16);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.18) translate3d(12px, -8px, 0);
+    filter: brightness(0.65) saturate(1.35) contrast(1.2);
+  }
 }
 
 img {
@@ -62,11 +254,27 @@ a {
   text-decoration: none;
 }
 
+body:not(.intro-finished) .page-shell {
+  opacity: 0;
+  transform: translateY(36px) scale(0.985);
+  filter: blur(12px);
+}
+
+body.intro-finished .page-shell {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  filter: blur(0);
+}
+
 .page-shell {
   position: relative;
   z-index: 1;
   min-height: 100vh;
   background: linear-gradient(180deg, rgba(5, 11, 22, 0.25), rgba(5, 11, 22, 0.9));
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  filter: blur(0);
+  transition: opacity 1.2s ease 0.18s, transform 1.35s cubic-bezier(0.22, 1, 0.36, 1) 0.18s, filter 1.2s ease 0.18s;
 }
 
 .top-trust-bar {
@@ -250,20 +458,81 @@ p {
     radial-gradient(circle at bottom right, rgba(139, 92, 246, 0.28), transparent 25%),
     linear-gradient(120deg, rgba(96, 165, 250, 0.08), transparent 40%);
   pointer-events: none;
+  z-index: 2;
+}
+
+.hero-video-wrap {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: #020914;
+}
+
+.hero-video-wrap video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.5;
+  filter: saturate(1.35) contrast(1.08) brightness(0.62);
+  transform: scale(1.12);
+}
+
+.hero-ambient {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.orb {
+  position: absolute;
+  display: block;
+  border-radius: 50%;
+  filter: blur(18px);
+  opacity: 0.7;
+  animation: orbFloat 16s ease-in-out infinite alternate;
+}
+
+.orb-one {
+  width: 420px;
+  height: 420px;
+  background: rgba(34, 211, 238, 0.2);
+  top: -120px;
+  left: 6%;
+}
+
+.orb-two {
+  width: 520px;
+  height: 520px;
+  background: rgba(139, 92, 246, 0.16);
+  right: 6%;
+  bottom: -180px;
+  animation-delay: 1.2s;
+}
+
+.orb-three {
+  width: 360px;
+  height: 360px;
+  background: rgba(96, 165, 250, 0.15);
+  left: 50%;
+  bottom: -130px;
+  transform: translateX(-50%);
+  animation-delay: 2.4s;
 }
 
 .hero-overlay {
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(90deg, rgba(4, 9, 20, 0.92) 0%, rgba(4, 9, 20, 0.8) 42%, rgba(4, 9, 20, 0.88) 100%),
-    url("FONDO.jpg") center/cover no-repeat;
+    linear-gradient(90deg, rgba(4, 9, 20, 0.94) 0%, rgba(4, 9, 20, 0.8) 40%, rgba(4, 9, 20, 0.88) 100%),
+    linear-gradient(180deg, rgba(4, 9, 20, 0.18), rgba(4, 9, 20, 0.7));
   filter: saturate(1.15);
+  z-index: 1;
 }
 
 .hero-content {
   position: relative;
-  z-index: 1;
+  z-index: 3;
   display: grid;
   grid-template-columns: 1.5fr 0.9fr;
   gap: 52px;
