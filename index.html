@@ -17,6 +17,27 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
+    <div class="intro-screen" id="introScreen" aria-hidden="true">
+      <video class="intro-video" autoplay muted loop playsinline poster="FONDO.jpg">
+        <source src="intro 1.mp4" type="video/mp4" />
+      </video>
+      <div class="intro-grid"></div>
+      <div class="intro-particles" aria-hidden="true">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <div class="intro-core">
+        <div class="intro-pulse"></div>
+        <img class="intro-logo" src="LOGO STO.png" alt="SecuTech ops" />
+        <p class="intro-kicker">SEGURIDAD PRIVADA · OPERACIÓN DIGITAL</p>
+        <h2>SecuTech ops</h2>
+        <button class="intro-enter-btn" type="button" id="enterSiteBtn" onclick="document.getElementById('introScreen').classList.add('hidden'); document.getElementById('introScreen').style.display='none'; document.getElementById('introScreen').style.opacity='0'; document.getElementById('introScreen').style.visibility='hidden';">Entrar a la web</button>
+      </div>
+    </div>
+
     <div class="page-shell">
       <div class="top-trust-bar">
         <div class="container top-trust-inner">
@@ -43,13 +64,23 @@
       </nav>
 
       <header id="inicio" class="hero">
+        <div class="hero-video-wrap" aria-hidden="true">
+          <video autoplay muted loop playsinline poster="FONDO.jpg">
+            <source src="https://cdn.coverr.co/videos/coverr-traffic-on-a-night-street-1564812484861/1080p.mp4" type="video/mp4" />
+          </video>
+        </div>
+        <div class="hero-ambient" aria-hidden="true">
+          <span class="orb orb-one"></span>
+          <span class="orb orb-two"></span>
+          <span class="orb orb-three"></span>
+        </div>
         <div class="hero-overlay"></div>
         <div class="container hero-content">
           <div class="hero-copy">
             <span class="eyebrow">Sistematización inteligente · seguridad privada · trazabilidad total</span>
             <h1>Automatizamos la operación para que todo esté bajo control.</h1>
             <p>
-              No vendemos apps ni páginas web genéricas: ofrecemos servicios de sistematización
+              Ofrecemos el mejor servicio de sistematización
               para transformar cada operación en un ecosistema digital conectado.
               Accesos, rondas, reloj control, supervisión y reportes en tiempo real para que
               tu servicio funcione más inteligente, seguro y escalable.
@@ -539,6 +570,86 @@
       const modal = document.getElementById('appModal');
       const modalImg = modal.querySelector('img');
       const closeBtn = document.querySelector('.modal-close');
+      const introScreen = document.getElementById('introScreen');
+      const enterSiteBtn = document.getElementById('enterSiteBtn');
+      const introVideo = document.querySelector('.intro-video');
+      const hero = document.querySelector('.hero');
+      const heroCopy = document.querySelector('.hero-copy');
+      const heroPanel = document.querySelector('.hero-panel');
+      let introTimer = null;
+
+      if (introVideo) {
+        introVideo.style.animation = 'introVideoPan 18s ease-in-out infinite alternate';
+        introVideo.play().catch(() => {});
+      }
+
+      window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+
+      const hideIntro = () => {
+        if (!introScreen) return;
+        if (introTimer) {
+          clearTimeout(introTimer);
+          introTimer = null;
+        }
+        introScreen.classList.add('hidden');
+        introScreen.setAttribute('aria-hidden', 'true');
+
+        setTimeout(() => {
+          introScreen.style.display = 'none';
+          introScreen.style.opacity = '0';
+          introScreen.style.visibility = 'hidden';
+          document.body.classList.add('intro-finished');
+        }, 180);
+      };
+
+      if (introScreen) {
+        introScreen.classList.remove('hidden');
+        introScreen.style.opacity = '1';
+        introScreen.style.visibility = 'visible';
+        introScreen.setAttribute('aria-hidden', 'false');
+
+        if (enterSiteBtn) {
+          const activateIntroExit = (event) => {
+            event.preventDefault();
+            hideIntro();
+          };
+
+          enterSiteBtn.addEventListener('click', activateIntroExit);
+          enterSiteBtn.addEventListener('pointerdown', activateIntroExit);
+          enterSiteBtn.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter' || event.key === ' ') {
+              activateIntroExit(event);
+            }
+          });
+          enterSiteBtn.onclick = () => hideIntro();
+        }
+
+        document.addEventListener('keydown', (event) => {
+          if ((event.key === 'Enter' || event.key === ' ') && introScreen && !introScreen.classList.contains('hidden')) {
+            event.preventDefault();
+            hideIntro();
+          }
+        });
+
+        window.addEventListener('load', () => {
+          introTimer = setTimeout(() => {
+            if (!document.body.classList.contains('intro-locked')) {
+              hideIntro();
+            }
+          }, 4500);
+        }, { once: true });
+      }
+
+      const applyParallax = () => {
+        if (!hero || !heroCopy || !heroPanel) return;
+        const offset = window.scrollY * 0.12;
+        hero.style.backgroundPosition = `center ${offset * 0.2}px`;
+        heroCopy.style.transform = `translateY(${Math.min(offset * 0.18, 18)}px)`;
+        heroPanel.style.transform = `perspective(1200px) rotateY(-4deg) translateY(${Math.min(offset * 0.1, 12)}px)`;
+      };
+
+      applyParallax();
+      window.addEventListener('scroll', applyParallax, { passive: true });
 
       function closeModal() {
         modal.classList.remove('open');
